@@ -1,5 +1,6 @@
 from selenium import webdriver
 import pytest
+from selenium.webdriver.chrome.options import Options
 
 
 def pytest_addoption(parser):
@@ -13,10 +14,10 @@ def browser(request):
     language = request.config.getoption("language")
     if (language + " ") in languages:
         print("\nstart chrome browser for test..")
-        browser = webdriver.Chrome()
-        print("\nopening page")
-        browser.get(
-            "http://selenium1py.pythonanywhere.com/{}/catalogue/coders-at-work_207/".format(language))
+        options = Options()
+        options.add_experimental_option(
+            'prefs', {'intl.accept_languages': language})
+        browser = webdriver.Chrome(options=options)
     else:
         print("\nlanguage {} not supported :(\ntry: ar ca cs da de el es fi fr it ko nl pl pt pt-br ro ru sk uk zh-hans en-gb".format(language))
         pytest.fail("Wrong Language")
